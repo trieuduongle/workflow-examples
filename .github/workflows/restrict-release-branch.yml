@@ -1,0 +1,17 @@
+name: Check pull request source branch
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  check-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branches
+        run: |
+          if [ ${{ github.head_ref }} != "main" ] && [ ${{ github.base_ref }} == "release" ]; then
+            echo "Merge requests to release branch are only allowed from main branch."
+            exit 1
+          fi
